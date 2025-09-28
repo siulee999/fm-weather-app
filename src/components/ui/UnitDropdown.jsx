@@ -57,7 +57,7 @@ const UnitDropdown = ({ selectedUnits, setSelectedUnits }) => {
                     >
                       <span>{option.label}</span>
                       <ReactSVG
-                        src="/assets/icon-checkmark.svg"
+                        src="assets/icon-checkmark.svg"
                         className={`size-4 ${option.value === selectedUnits[unit.value] ? "block" : "hidden"}`} />
                     </button>
                   ))
