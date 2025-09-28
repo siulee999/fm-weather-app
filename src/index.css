@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap');
+
+@import "tailwindcss";
+
+
+@theme {
+  /* n Colors */
+  --color-n-900: hsl(243, 96%, 9%);
+  --color-n-800: hsl(243, 27%, 20%);
+  --color-n-700: hsl(243, 23%, 24%);
+  --color-n-600: hsl(243, 23%, 30%);
+  --color-n-300: hsl(240, 6%, 70%);
+  --color-n-200: hsl(250, 6%, 84%);
+  --color-n-0: hsl(0, 0%, 100%);
+
+  /* Orange Color */
+  --color-o-500: hsl(28, 100%, 52%);
+
+  /* Blue Colors */
+  --color-b-500: hsl(233, 67%, 56%);
+  --color-b-700: hsl(248, 70%, 36%);
+
+  /* Typography */
+  --font-dm-sans: "DM Sans", sans-serif;
+  --font-brico: "Bricolage Grotesque", sans-serif;
+
+  --font-size-body: 18px;
+}
+
+@layer base {
+  html, body {
+    @apply font-dm-sans text-n-0
+  }
+
+  button {
+    @apply hover:cursor-pointer
+  }
+}
+
+
+@layer utilities {
+  .flex-center {
+    @apply flex justify-center items-center
+  }
+
+  .text-p-1 {
+    @apply font-dm-sans font-semibold italic text-7xl sm:text-8xl tracking-[-2px]
+  }
+
+  .text-p-2 {
+    @apply font-brico font-bold text-[3.25rem] leading-[1.2] 
+  }
+
+  .text-p-3 {
+    @apply font-dm-sans font-light text-xl sm:text-[2rem]
+  }
+
+  .text-p-4 {
+    @apply font-dm-sans font-bold text-2xl sm:text-[1.75rem] leading-[1.2]
+  }
+
+  .text-p-5 {
+    @apply font-dm-sans font-semibold text-lg sm:text-xl leading-[1.2]
+  }
+
+  .text-p-5m {
+    @apply font-dm-sans font-medium text-lg sm:text-xl leading-[1.2]
+  }
+
+  .text-p-6 {
+    @apply font-dm-sans font-medium text-base sm:text-lg leading-[1.2]
+  }
+
+  .text-p-7 {
+    @apply font-dm-sans font-medium text-sm sm:text-base leading-[1.2]
+  }
+
+  .text-p-8 {
+    @apply font-dm-sans font-medium text-xs sm:text-sm leading-[1.2]
+  }
+}
