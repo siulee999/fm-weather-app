@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Header } from "./components/ui/Header";
 import SearchBar from "./components/ui/SearchBar";
 import Current from "./components/weather/Current";
 import Daily from "./components/weather/Daily";
 import Hourly from "./components/weather/Hourly";
-import Error from "./components/ui/Error";
+import Error from "./components/weather/Error";
 import axios from "axios";
+import NoResult from "./components/weather/NoResult";
+import { useQuery } from "@tanstack/react-query";
 
 
 const App = () => {
@@ -15,18 +17,9 @@ const App = () => {
     displayName: "Hong Kong Island, Hong Kong"
   });
 
-  const [weatherData, setWeatherData] = useState({});
-
-  const currentData = useMemo(() => weatherData.current, [weatherData]);
-  const dailyData = useMemo(() => weatherData.daily, [weatherData]);
-  const hourlyData = useMemo(() => weatherData.hourly, [weatherData]);
-
   const [tempUnit, setTempUnit] = useState("celsius");
   const [windSpeedUnit, setWindSpeedUnit] = useState("kmh");
   const [preciUnit, setPreciUnit] = useState("mm");
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(true);
 
   const params = {
     latitude: location.lat,
@@ -41,31 +34,26 @@ const App = () => {
     hourly: "temperature_2m,weather_code",
   }
 
-  useEffect(() => {
-    async function fetchWeatherData() {
-      try {
-        setIsLoading(true);
+  const { data: weatherData, isLoading, error, refetch } = useQuery({
+    queryKey: ["weather", location.lat, location.lon],
+    queryFn: async () => {
+      const response = await axios.get("https://api.open-meteo.com/v1/forecast", { params });
+      return response.data;
+    },
+    staleTime: 5 * 60 * 1000
+  })
 
-        const response = await axios.get("https://api.open-meteo.com/v1/forecast", { params });
-        setWeatherData(response.data);
+  const currentData = useMemo(() => weatherData?.current, [weatherData]);
+  const dailyData = useMemo(() => weatherData?.daily, [weatherData]);
+  const hourlyData = useMemo(() => weatherData?.hourly, [weatherData]);
 
-      } catch (err) {
-        console.log(err);
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchWeatherData();
-  }, []);
 
   return (
     <div className="min-h-screen min-w-[390px] bg-n-900">
       <Header className="px-6 md:px-14 pt-6" tempUnit={tempUnit} windSpeedUnit={windSpeedUnit} preciUnit={preciUnit} setTempUnit={setTempUnit} setWindSpeedUnit={setWindSpeedUnit} setPreciUnit={setPreciUnit} />
       {
         error
-          ? <Error className={"pt-10 mt-12 md:mt-16"}/>
+          ? <Error className={"pt-10 mt-12 md:mt-16"} refetch={refetch} />
           : (<>
             <h1 className="text-center text-p-2 px-4 md:px-14 py-12 md:py-16">How’s the sky looking today?</h1>
             <main className="px-4 md:px-14 pb-16 flex flex-col items-center justify-between gap-8 md:gap-12">
@@ -93,7 +81,7 @@ const App = () => {
                         tempUnit={tempUnit} />
                     </div>
                   ) : (
-                    <div className="text-p-4">No search result found!</div>
+                    <NoResult />
                   )
               }
             </main>
