@@ -1,37 +1,22 @@
 import { ReactSVG } from "react-svg"
 import Button from "./Button"
-import { useEffect, useState, useRef } from "react";
-import axios from "axios";
-
+import { useState, useRef, useMemo } from "react";
+import { generateLocationSuggestions } from "../../others/utils";
 
 const SearchBar = ({ setLocation }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
 
   const inputRef = useRef(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const locationSuggestions = useMemo(() => {
+    const cleanedTerm = searchTerm.trim();
 
-  async function fetchLocationSuggestions(city) {
-    try {
-      setSuggestions([]);
-      setIsLoading(true);
+    if (!cleanedTerm) return;
 
-      const response = await axios.get(`${import.meta.env.VITE_MY_PROXY_SERVER}/api/locations`, {
-        params: { city }
-      });
-      const filteredList = response.data;
-      setSuggestions(filteredList);
+    return generateLocationSuggestions(cleanedTerm)}
+  , [searchTerm]);
 
-    } catch (err) {
-      console.log(err);
-      alert("Something went wrong fetching for suggestions.");
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
   function handleSuggestionSubmit(lat, lon, displayName) {
     if (!lat || !lon || !displayName) {
@@ -39,35 +24,14 @@ const SearchBar = ({ setLocation }) => {
     }
     setLocation({ lat, lon, displayName });
     setSearchTerm("");
-    setSuggestions([]);
   }
 
   function handleFormSubmit(e) {
     e.preventDefault();
     setLocation(null);
     setSearchTerm("");
-    setSuggestions([]);
   }
 
-  useEffect(() => {
-    if (!searchTerm.trim()) {
-      setSuggestions([]);
-      return;
-    }
-
-    let id = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 300);
-
-    return () => clearTimeout(id);
-  }, [searchTerm]);
-
-
-  useEffect(() => {
-    if (debouncedSearchTerm && debouncedSearchTerm.trim().length >= 2) {
-      fetchLocationSuggestions(debouncedSearchTerm);
-    }
-  }, [debouncedSearchTerm]);
 
   return (
     <div className="w-full flex justify-center">
@@ -94,16 +58,9 @@ const SearchBar = ({ setLocation }) => {
             isInputFocused && (
               <div className={`absolute left-0 right-0 top-full mt-3 z-[55] bg-n-800 rounded-xl text-p-7 text-n-0 [&>*]:mb-1`}>
                 {
-                  isLoading && (
-                    <div className="px-4 py-5 flex gap-4">
-                      <ReactSVG src="assets/icon-loading.svg" size={20} />
-                      <span>Search in progress</span>
-                    </div>)
-                }
-                {
-                  suggestions?.length > 0 && (
+                  locationSuggestions?.length > 0 && (
                     <div className="px-2 py-2.5">
-                      {suggestions.map((item) => (
+                      {locationSuggestions.map((item) => (
                         <div
                           key={`${item.lat}-${item.lon}`}
                           onMouseDown={() => handleSuggestionSubmit(item.lat, item.lon, item.displayName)}
