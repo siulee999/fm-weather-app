@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useState } from "react";
 import SimpleDropdown from "../ui/SimpleDropdown";
 import { findWeatherSrc, convertTempUnit } from "../../others/utils.js";
@@ -6,19 +6,25 @@ import { findWeatherSrc, convertTempUnit } from "../../others/utils.js";
 const Hourly = ({ hourlyData, tempUnit, isLoading }) => {
   const [selectedDay, setSelectedDay] = useState(0);
 
-  const startIndex = selectedDay * 24;
-  const endIndex = startIndex + 24;
-  const dayData = {
-    time: hourlyData?.time?.slice(startIndex, endIndex) || [],
-    temperature: hourlyData?.temperature_2m?.slice(startIndex, endIndex) || [],
-    weather_code: hourlyData?.weather_code?.slice(startIndex, endIndex) || [],
-  };
+  const weekdays = useMemo(() => {
+    const days = Array.from({ length: 7 }, (_, i) => {
+      const date = hourlyData?.time[i * 24];
+      if (date) return new Date(date).toLocaleDateString("en-US", { weekday: "long" })
+      return null
+    }); 
 
-  const weekdays = Array.from({ length: 7 }, (_, i) => {
-    const date = hourlyData?.time[i * 24];
-    if (date) return new Date(date).toLocaleDateString("en-US", { weekday: "long" })
-    return null
-  });
+    return days
+  }, [hourlyData]);
+
+  const dayData = useMemo(() => {
+    const startIndex = selectedDay * 24;
+    const endIndex = startIndex + 24;
+    return {
+      time: hourlyData?.time?.slice(startIndex, endIndex) || [],
+      temperature: hourlyData?.temperature_2m?.slice(startIndex, endIndex) || [],
+      weather_code: hourlyData?.weather_code?.slice(startIndex, endIndex) || [],
+    }
+  }, [selectedDay, hourlyData]);
 
 
   return (
