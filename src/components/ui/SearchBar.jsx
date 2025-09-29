@@ -11,7 +11,6 @@ const SearchBar = ({ setLocation }) => {
 
   const locationSuggestions = useMemo(() => {
     const cleanedTerm = searchTerm.trim();
-
     if (!cleanedTerm) return;
 
     return generateLocationSuggestions(cleanedTerm)}

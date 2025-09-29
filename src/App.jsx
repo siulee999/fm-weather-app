@@ -22,8 +22,8 @@ const App = () => {
   const [preciUnit, setPreciUnit] = useState("mm");
 
   const params = {
-    latitude: location.lat,
-    longitude: location.lon,
+    latitude: location?.lat,
+    longitude: location?.lon,
     timezone: "auto",
     forecast_days: 7,
     temperature_unit: "celsius",
@@ -35,7 +35,7 @@ const App = () => {
   }
 
   const { data: weatherData, isLoading, error, refetch } = useQuery({
-    queryKey: ["weather", location.lat, location.lon],
+    queryKey: ["weather", location?.lat, location?.lon],
     queryFn: async () => {
       const response = await axios.get("https://api.open-meteo.com/v1/forecast", { params });
       return response.data;
