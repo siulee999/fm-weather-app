@@ -12,9 +12,9 @@ import { useQuery } from "@tanstack/react-query";
 
 const App = () => {
   const [location, setLocation] = useState({
-    lat: "22.2793278",
-    lon: "114.1628131",
-    displayName: "Hong Kong Island, Hong Kong"
+    lat: "22.3167",
+    lon: "114.1833",
+    displayName: "Kowloon, Hong Kong"
   });
 
   const [tempUnit, setTempUnit] = useState("celsius");
