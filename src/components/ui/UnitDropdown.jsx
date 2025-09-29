@@ -5,7 +5,6 @@ import { ReactSVG } from "react-svg";
 const UnitDropdown = ({ 
   tempUnit, windSpeedUnit, preciUnit, setTempUnit, setWindSpeedUnit, setPreciUnit
  }) => {
-  console.log("APP-Header-UnitDropdown rendering");
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   const isMetric = tempUnit === "celsius" && windSpeedUnit === "kmh" && preciUnit === "mm";

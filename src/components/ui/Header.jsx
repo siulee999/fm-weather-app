@@ -4,7 +4,6 @@ import UnitDropdown from "./UnitDropdown";
 export const Header = ({
   tempUnit, windSpeedUnit, preciUnit, setTempUnit, setWindSpeedUnit, setPreciUnit, className
 }) => {
-  console.log("APP-Header rendering");
   return (
     <header className={`flex items-center justify-between ${className}`}>
       <ReactSVG src="assets/logo.svg" className="flex items-center gap-3" />

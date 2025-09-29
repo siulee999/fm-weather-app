@@ -34,7 +34,7 @@ const Current = ({ currentData, tempUnit, windSpeedUnit, preciUnit, location, is
 
   return (
     <section>
-      <div className="rounded-2xl px-8 py-8 sm:py-20 md:py-24 flex items-center justify-center flex-col sm:flex-row sm:justify-between gap-6 mb-6 bg-[url('assets/bg-today-small.svg')] sm:bg-[url('assets/bg-today-large.svg')] bg-no-repeat bg-center bg-cover">
+      <div className="rounded-2xl px-8 py-8 sm:py-20 md:py-24 flex items-center justify-center flex-col sm:flex-row sm:justify-between gap-6 mb-6 bg-[url('bg-today-small.svg')] sm:bg-[url('bg-today-large.svg')] bg-no-repeat bg-center bg-cover">
         {
           isLoading
             ? (
