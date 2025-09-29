@@ -1,55 +1,19 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { findWeatherSrc } from "../../others/utils.js";
+import { memo } from 'react';
+import { findWeatherSrc, convertTempUnit } from "../../others/utils.js";
 
-const Daily = ({ selectedUnits, location }) => {
-  const [dailyData, setDailyData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  const daily_value = dailyData?.daily;
-
+const Daily = ({ dailyData, tempUnit, isLoading }) => {
   let dailyList = Array.from({ length: 7 }, (_, i) => ({
-    day: daily_value?.time?.[i]
-      ? new Date(daily_value.time[i]).toLocaleDateString("en-US", { weekday: "short" })
+    day: dailyData?.time?.[i]
+      ? new Date(dailyData.time[i]).toLocaleDateString("en-US", { weekday: "short" })
       : "N/A",
-    min: daily_value?.temperature_2m_min?.[i] !== undefined 
-      ? Math.round(daily_value.temperature_2m_min[i]) 
+    min: dailyData?.temperature_2m_min?.[i] !== undefined 
+      ? convertTempUnit(dailyData?.temperature_2m_min[i], tempUnit)
       : "N/A",
-    max: daily_value?.temperature_2m_max?.[i] !== undefined 
-      ? Math.round(daily_value.temperature_2m_max[i]) 
+    max: dailyData?.temperature_2m_max?.[i] !== undefined 
+      ? convertTempUnit(dailyData.temperature_2m_max[i], tempUnit) 
       : "N/A",
-    weatherSrc: findWeatherSrc(daily_value?.weather_code[i])
+    weatherSrc: findWeatherSrc(dailyData?.weather_code[i])
   }));
-
-  const params = {
-    latitude: location.lat,
-    longitude: location.lon,
-    timezone: "auto",
-    temperature_unit: selectedUnits.temperature,
-    forecast_days: 7,
-    daily: "temperature_2m_min,temperature_2m_max,weather_code",
-  };
-
-  useEffect(() => {
-    async function fetchDailyData() {
-      try {
-        setIsLoading(true);
-
-        const response = await axios.get("https://api.open-meteo.com/v1/forecast", { params });
-        setDailyData(response.data);
-
-      } catch (err) {
-        console.log(err);
-        alert("Something went wrong. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-
-    }
-
-    fetchDailyData();
-  }, [selectedUnits.temperature, location]);
-
   
   return (
     <div className="flex flex-col gap-4">
@@ -76,4 +40,4 @@ const Daily = ({ selectedUnits, location }) => {
   )
 }
 
-export default Daily
+export default memo(Daily)

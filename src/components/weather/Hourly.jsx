@@ -1,57 +1,24 @@
-import { useEffect, useState } from "react";
+import { memo } from 'react';
+import { useState } from "react";
 import SimpleDropdown from "../ui/SimpleDropdown";
-import axios from "axios";
-import { findWeatherSrc } from "../../others/utils.js";
+import { findWeatherSrc, convertTempUnit } from "../../others/utils.js";
 
-const Hourly = ({ selectedUnits, location }) => {
-  const [hourlyData, setHourlyData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  
+const Hourly = ({ hourlyData, tempUnit, isLoading }) => {
   const [selectedDay, setSelectedDay] = useState(0);
-
-  const hourly_value = hourlyData?.hourly;
 
   const startIndex = selectedDay * 24;
   const endIndex = startIndex + 24;
   const dayData = {
-    time: hourly_value?.time?.slice(startIndex, endIndex) || [],
-    temperature: hourly_value?.temperature_2m?.slice(startIndex, endIndex) || [],
-    weather_code: hourly_value?.weather_code?.slice(startIndex, endIndex) || [],
+    time: hourlyData?.time?.slice(startIndex, endIndex) || [],
+    temperature: hourlyData?.temperature_2m?.slice(startIndex, endIndex) || [],
+    weather_code: hourlyData?.weather_code?.slice(startIndex, endIndex) || [],
   };
 
   const weekdays = Array.from({ length: 7 }, (_, i) => {
-    const date = hourly_value?.time[i * 24];
+    const date = hourlyData?.time[i * 24];
     if (date) return new Date(date).toLocaleDateString("en-US", { weekday: "long" })
     return null
   });
-
-  const params = {
-    latitude: location.lat,
-    longitude: location.lon,
-    timezone: "auto",
-    temperature_unit: selectedUnits.temperature,
-    hourly: "temperature_2m,weather_code",
-    forecast_days: 7,
-  };
-
-  useEffect(() => {
-    async function fetchHourlyData() {
-      try {
-        setIsLoading(true);
-
-        const response = await axios.get("https://api.open-meteo.com/v1/forecast", { params });
-        setHourlyData(response.data);
-
-      } catch (err) {
-        console.error(err);
-        alert("Something went wrong. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchHourlyData();
-  }, [selectedUnits.temperature, location]);
 
 
   return (
@@ -76,7 +43,7 @@ const Hourly = ({ selectedUnits, location }) => {
                   }
                 </div>
               </div>
-              <div className="text-p-7">{Math.round(dayData?.temperature[index])}°</div>
+              <div className="text-p-7">{convertTempUnit(dayData?.temperature[index], tempUnit)}°</div>
             </div>
           ))
         }
@@ -85,4 +52,4 @@ const Hourly = ({ selectedUnits, location }) => {
   )
 }
 
-export default Hourly
+export default memo(Hourly)

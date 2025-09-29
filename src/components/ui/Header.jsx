@@ -1,11 +1,14 @@
 import { ReactSVG } from "react-svg";
 import UnitDropdown from "./UnitDropdown";
 
-export const Header = ({ selectedUnits, setSelectedUnits, className }) => {
+export const Header = ({
+  tempUnit, windSpeedUnit, preciUnit, setTempUnit, setWindSpeedUnit, setPreciUnit, className
+}) => {
+  console.log("APP-Header rendering");
   return (
     <header className={`flex items-center justify-between ${className}`}>
-      <ReactSVG src="assets/logo.svg" className="flex items-center gap-3"  />
-      <UnitDropdown selectedUnits={selectedUnits} setSelectedUnits={setSelectedUnits}/>
+      <ReactSVG src="assets/logo.svg" className="flex items-center gap-3" />
+      <UnitDropdown tempUnit={tempUnit} windSpeedUnit={windSpeedUnit} preciUnit={preciUnit} setTempUnit={setTempUnit} setWindSpeedUnit={setWindSpeedUnit} setPreciUnit={setPreciUnit} />
     </header>
   )
 }

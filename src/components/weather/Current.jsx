@@ -1,74 +1,36 @@
-import { useEffect, useState } from "react";
-import axios from 'axios';
-import { findWeatherSrc } from "../../others/utils.js";
+import { memo } from 'react';
+import { findWeatherSrc, convertTempUnit, convertWindSpeedUnit, convertPreciUnit } from "../../others/utils.js";
 import { SyncLoader } from "react-spinners";
 
-const Current = ({ selectedUnits, location }) => {
-  const [currentData, setCurrentData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-
-  const params = {
-    latitude: location.lat,
-    longitude: location.lon,
-    timezone: "auto",
-    temperature_unit: selectedUnits.temperature,
-    wind_speed_unit: selectedUnits.windSpeed,
-    precipitation_unit: selectedUnits.precipitation,
-    current: "weather_code,apparent_temperature,relative_humidity_2m,temperature_2m,wind_speed_10m,precipitation",
-  };
-
-  const current_units = currentData?.current_units;
-  const current_value = currentData?.current;
-
+const Current = ({ currentData, tempUnit, windSpeedUnit, preciUnit, location, isLoading }) => {
   const topList = {
     nameSegments: location.displayName.split(","),
     date: new Date().toLocaleDateString('en-US', {
       month: 'short', day: 'numeric', year: 'numeric'
     }),
-    weatherSrc: findWeatherSrc(current_value?.weather_code),
-    currentTemp: `${current_value?.temperature_2m === undefined ? "N/A" : Math.round(current_value?.temperature_2m)}°`
+    weatherSrc: findWeatherSrc(currentData?.weather_code),
+    currentTemp: `${currentData?.temperature_2m === undefined ? "N/A" : convertTempUnit(currentData?.temperature_2m, tempUnit)}°`
   };
 
   const bottomList = [
     {
       label: "Feels like",
-      value: current_value?.apparent_temperature === undefined ? "N/A" : Math.round(current_value?.apparent_temperature),
+      value: currentData?.apparent_temperature === undefined ? "N/A" : convertTempUnit(currentData?.apparent_temperature, tempUnit),
       unit: "°"
     }, {
       label: "Humidity",
-      value: current_value?.relative_humidity_2m === undefined ? "N/A" : Math.round(current_value?.relative_humidity_2m),
+      value: currentData?.relative_humidity_2m === undefined ? "N/A" : Math.round(currentData?.relative_humidity_2m),
       unit: "%"
     }, {
       label: "Wind",
-      value: current_value?.wind_speed_10m === undefined ? "N/A" : Math.round(current_value?.wind_speed_10m),
-      unit: current_units?.wind_speed_10m
+      value: currentData?.wind_speed_10m === undefined ? "N/A" : convertWindSpeedUnit(currentData?.wind_speed_10m, windSpeedUnit),
+      unit: windSpeedUnit
     }, {
       label: "Precipitation",
-      value: current_value?.precipitation === undefined ? "N/A" : Math.round(current_value?.precipitation),
-      unit: current_units?.precipitation
+      value: currentData?.precipitation === undefined ? "N/A" : convertPreciUnit(currentData?.precipitation, preciUnit),
+      unit: preciUnit
     }
   ];
-
-
-  useEffect(() => {
-    async function fetchCurrentData() {
-      try {
-        setIsLoading(true);
-
-        const response = await axios.get("https://api.open-meteo.com/v1/forecast", { params });
-        setCurrentData(response.data);
-
-      } catch (err) {
-        console.log(err);
-        alert("Something went wrong. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchCurrentData();
-  }, [selectedUnits, location]);
-
 
   return (
     <section>
@@ -114,4 +76,4 @@ const Current = ({ selectedUnits, location }) => {
   )
 }
 
-export default Current
+export default memo(Current)

@@ -2,26 +2,43 @@ import { useState } from "react";
 import { unitOptions, units } from "../../others/constant.js";
 import { ReactSVG } from "react-svg";
 
-const UnitDropdown = ({ selectedUnits, setSelectedUnits }) => {
+const UnitDropdown = ({ 
+  tempUnit, windSpeedUnit, preciUnit, setTempUnit, setWindSpeedUnit, setPreciUnit
+ }) => {
+  console.log("APP-Header-UnitDropdown rendering");
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  const isMetric = selectedUnits.temperature === "celsius" && selectedUnits.windSpeed === "kmh" && selectedUnits.precipitation === "mm";
+  const isMetric = tempUnit === "celsius" && windSpeedUnit === "kmh" && preciUnit === "mm";
 
   function toggleDropdown() {
     setIsDropdownOpened(!isDropdownOpened);
   }
 
   function handleUnitChange(key, value) {
-    setSelectedUnits(prev => ({ ...prev, [key]:value }));
+    if (key === "temperature") {
+      return setTempUnit(value);
+    } 
+
+    if (key === "windSpeed") {
+      return setWindSpeedUnit(value);
+    }
+
+    if (key === "precipitation") {
+      return setPreciUnit(value)
+    }
     setIsDropdownOpened(false);
   }
 
   function switchAllUnits() {
     if (isMetric) {
-      setSelectedUnits({ temperature: "fahrenheit", windSpeed: "mph", precipitation: "inch" })
+      setTempUnit("fahrenheit");
+      setWindSpeedUnit("mph");
+      setPreciUnit("inch");
 
     } else {
-      setSelectedUnits({ temperature: "celsius", windSpeed: "kmh", precipitation: "mm" });
+      setTempUnit("celsius");
+      setWindSpeedUnit("kmh");
+      setPreciUnit("mm");
     }
     setIsDropdownOpened(false);
   }
@@ -53,12 +70,16 @@ const UnitDropdown = ({ selectedUnits, setSelectedUnits }) => {
                     <button
                       key={index}
                       onClick={() => handleUnitChange(unit.value, option.value)}
-                      className={`flex justify-between items-center rounded-md px-2 py-2.5 ${option.value === selectedUnits[unit.value] ? "bg-n-700" : "bg-n-800"}`}
+                      className={`flex justify-between items-center rounded-md px-2 py-2.5 ${
+                        option.value === tempUnit || option.value === windSpeedUnit || option.value === preciUnit 
+                        ? "bg-n-700" : "bg-n-800"}`}
                     >
                       <span>{option.label}</span>
                       <ReactSVG
                         src="assets/icon-checkmark.svg"
-                        className={`size-4 ${option.value === selectedUnits[unit.value] ? "block" : "hidden"}`} />
+                        className={`size-4 ${
+                          option.value === tempUnit || option.value === windSpeedUnit || option.value === preciUnit 
+                          ? "block" : "hidden"}`} />
                     </button>
                   ))
                 }
