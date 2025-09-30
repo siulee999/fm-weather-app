@@ -1,5 +1,6 @@
 import { ReactSVG } from "react-svg";
 
+
 const Error = ({ className, refetch }) => {
   return (
     <div className={`flex flex-col justify-center items-center gap-6 ${className}`}>
@@ -10,7 +11,7 @@ const Error = ({ className, refetch }) => {
         onClick={refetch}
         className="bg-[#262540] rounded-lg px-4 py-3 flex gap-2.5"
       >
-        <ReactSVG src="assets/icon-retry.svg" className="size-4" />
+        <ReactSVG src="icon-retry.svg" className="size-4" />
         <span className="text-p-7">Retry</span>
       </button>
     </div>

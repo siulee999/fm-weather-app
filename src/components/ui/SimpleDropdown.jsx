@@ -31,7 +31,7 @@ const SimpleDropdown = ({ list, setSelectedDay, selectedDay }) => {
               <button
                 key={idx}
                 onClick={() => handleWeekdayChange(idx)}
-                className={`w-full flex items-center gap-2 rounded-md px-3 py-2 text-p-7 focus:outline focus:outline-n-200 focus:outline-offset-2 ${idx === 0 ? "bg-n-700" : "bg-n-800"}`}
+                className={`w-full flex items-center gap-2 rounded-md px-3 py-2 text-p-7 focus:outline focus:outline-n-200 focus:outline-offset-2 ${idx === selectedDay ? "bg-n-700" : "bg-n-800"}`}
                 >
                 <span>{option}</span>
               </button>

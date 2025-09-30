@@ -1,5 +1,7 @@
 import { memo } from 'react';
-import { findWeatherSrc, convertTempUnit } from "../../others/utils.js";
+import { findWeatherSrc } from '../../utils/findWeatherSrc.js';
+import { convertTempUnit } from "../../utils/convertUnits.js";
+
 
 const Daily = ({ dailyData, tempUnit, isLoading }) => {
   let dailyList = Array.from({ length: 7 }, (_, i) => ({

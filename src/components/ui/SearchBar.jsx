@@ -1,7 +1,8 @@
-import { ReactSVG } from "react-svg"
-import Button from "./Button"
 import { useState, useRef, useMemo } from "react";
-import { generateLocationSuggestions } from "../../others/utils";
+import { ReactSVG } from "react-svg";
+import Button from "./Button";
+import { generateLocationSuggestions } from "../../utils/generateLocationSuggestions.js";
+
 
 const SearchBar = ({ setLocation }) => {
   const [searchTerm, setSearchTerm] = useState("");

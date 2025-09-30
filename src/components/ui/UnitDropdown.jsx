@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { unitOptions, units } from "../../others/constant.js";
+import { unitOptions, units } from "../../data/constant.js";
 import { ReactSVG } from "react-svg";
 
 const UnitDropdown = ({ 

@@ -1,7 +1,8 @@
-import { memo, useMemo } from 'react';
-import { useState } from "react";
+import { useState, memo, useMemo } from "react";
 import SimpleDropdown from "../ui/SimpleDropdown";
-import { findWeatherSrc, convertTempUnit } from "../../others/utils.js";
+import { findWeatherSrc } from "../../utils/findWeatherSrc.js";
+import { convertTempUnit } from "../../utils/convertUnits.js";
+
 
 const Hourly = ({ hourlyData, tempUnit, isLoading }) => {
   const [selectedDay, setSelectedDay] = useState(0);

@@ -1,12 +1,14 @@
 import { memo } from 'react';
-import { findWeatherSrc, convertTempUnit, convertWindSpeedUnit, convertPreciUnit } from "../../others/utils.js";
 import { SyncLoader } from "react-spinners";
+import { findWeatherSrc } from "../../utils/findWeatherSrc.js";
+import { convertTempUnit, convertWindSpeedUnit, convertPreciUnit } from "../../utils/convertUnits.js";
+
 
 const Current = ({ currentData, tempUnit, windSpeedUnit, preciUnit, location, isLoading }) => {
   const topList = {
     nameSegments: location.displayName.split(","),
     date: new Date().toLocaleDateString('en-US', {
-      month: 'short', day: 'numeric', year: 'numeric'
+      weekday: "short", month: 'short', day: 'numeric', year: 'numeric'
     }),
     weatherSrc: findWeatherSrc(currentData?.weather_code),
     currentTemp: `${currentData?.temperature_2m === undefined ? "N/A" : convertTempUnit(currentData?.temperature_2m, tempUnit)}°`
