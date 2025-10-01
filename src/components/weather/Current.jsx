@@ -53,7 +53,7 @@ const Current = ({ currentData, tempUnit, windSpeedUnit, preciUnit, location, is
                 </div>
                 <div className="flex items-center gap-5">
                   {
-                    topList?.weatherSrc && <img alt="weather icon" className="w-24 h-24" src={topList?.weatherSrc} />
+                    topList?.weatherSrc && <img alt="weather image" data-testid="weather-image" className="w-24 h-24" src={topList?.weatherSrc} />
                   }
                   <div className="text-p-1">{topList?.currentTemp}</div>
                 </div>

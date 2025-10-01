@@ -7,12 +7,12 @@ const Daily = ({ dailyData, tempUnit, isLoading }) => {
   let dailyList = Array.from({ length: 7 }, (_, i) => ({
     day: dailyData?.time?.[i]
       ? new Date(dailyData.time[i]).toLocaleDateString("en-US", { weekday: "short" })
-      : "N/A",
+      : "-",
     min: dailyData?.temperature_2m_min?.[i] !== undefined 
-      ? convertTempUnit(dailyData?.temperature_2m_min[i], tempUnit)
+      ? `${convertTempUnit(dailyData?.temperature_2m_min[i], tempUnit)}°`
       : "N/A",
     max: dailyData?.temperature_2m_max?.[i] !== undefined 
-      ? convertTempUnit(dailyData.temperature_2m_max[i], tempUnit) 
+      ? `${convertTempUnit(dailyData.temperature_2m_max[i], tempUnit)}°`
       : "N/A",
     weatherSrc: findWeatherSrc(dailyData?.weather_code[i])
   }));
@@ -27,10 +27,10 @@ const Daily = ({ dailyData, tempUnit, isLoading }) => {
               {
                 <>
                   <div className={`text-p-6 ${isLoading ? "invisible" : "block"}`}>{d.day}</div>
-                  <img alt="icon" className={`w-full max-w-20 object-contain object-center ${isLoading ? "invisible" : "block"}`} src={d.weatherSrc} />
+                  <img alt="weather image" className={`w-full max-w-20 object-contain object-center ${isLoading ? "invisible" : "block"}`} src={d.weatherSrc} />
                   <div className={`w-full flex items-center justify-between text-p-7 ${isLoading ? "invisible" : "block"}`}>
-                    <span>{d.min}°</span>
-                    <span>{d.max}°</span>
+                    <span>{d.min}</span>
+                    <span>{d.max}</span>
                   </div>
                 </>
               }

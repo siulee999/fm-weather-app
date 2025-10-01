@@ -17,6 +17,7 @@ const SimpleDropdown = ({ list, setSelectedDay, selectedDay }) => {
     <div className="relative">
       <button
         onClick={toggleDropdown}
+        data-testid="weekday-dropdown-btn"
         className="px-3 py-2 rounded-md bg-n-600 text-p-7 flex items-center justify-between gap-2 focus:outline-2 focus:outline-n-200 focus:outline-offset-4"
         >
         <span>{list[selectedDay] || "-"}</span>
@@ -30,6 +31,7 @@ const SimpleDropdown = ({ list, setSelectedDay, selectedDay }) => {
             list?.map((option, idx) => (
               <button
                 key={idx}
+                data-testid="weekday-btns"
                 onClick={() => handleWeekdayChange(idx)}
                 className={`w-full flex items-center gap-2 rounded-md px-3 py-2 text-p-7 focus:outline focus:outline-n-200 focus:outline-offset-2 ${idx === selectedDay ? "bg-n-700" : "bg-n-800"}`}
                 >

@@ -50,7 +50,7 @@ const Hourly = ({ hourlyData, tempUnit, isLoading }) => {
                   }
                 </div>
               </div>
-              <div className="text-p-7">{convertTempUnit(dayData?.temperature[index], tempUnit)}°</div>
+              <div className="text-p-7">{`${convertTempUnit(dayData?.temperature[index], tempUnit)}°`}</div>
             </div>
           ))
         }
