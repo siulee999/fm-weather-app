@@ -12,7 +12,7 @@ const Hourly = ({ hourlyData, tempUnit, isLoading }) => {
       const date = hourlyData?.time[i * 24];
       if (date) return new Date(date).toLocaleDateString("en-US", { weekday: "long" })
       return null
-    }); 
+    });
 
     return days
   }, [hourlyData]);
@@ -29,33 +29,39 @@ const Hourly = ({ hourlyData, tempUnit, isLoading }) => {
 
 
   return (
-    <aside className="rounded-2xl bg-n-800 p-6 flex flex-col gap-4">
+    <section className="rounded-2xl bg-n-800 p-6 flex flex-col gap-4" aria-labelledby="hourly-weather">
       <div className="flex items-center justify-between">
-        <div className="text-p-5">Hourly forecast</div>
+        <h2 id="hourly-weather" aria-label="Hourly forecast of 7 days" className="text-p-5">Hourly forecast</h2>
         <SimpleDropdown list={weekdays} setSelectedDay={setSelectedDay} selectedDay={selectedDay} />
       </div>
 
-      <div className="flex flex-col gap-6 justify-between h-[580px] overflow-y-scroll">
+      <ul className="flex flex-col gap-6 justify-between h-[580px] overflow-y-scroll" aria-label={`hourly forecast of ${weekdays[selectedDay]}`}>
         {
-          dayData?.time.map((h, index) => (
-            <div key={h} className={`flex justify-between items-center gap-3 bg-n-700 border border-n-600 rounded-md px-4 py-2 ${isLoading ? "invisible" : "block"}`}>
-              <div className="flex items-center gap-2">
-                <img alt="icon" className="w-10 h-10" src={findWeatherSrc(dayData?.weather_code[index])} />
-                <div className="text-p-5m">
-                  {
-                    new Date(h).toLocaleTimeString("en-US", {
-                      hour: "numeric",
-                      hour12: true
-                    })
-                  }
+          dayData?.time.map((h, index) => {
+            const { weatherSrc, weatherAlt } = findWeatherSrc(dayData?.weather_code[index]);
+            const hourTime = new Date(h).toLocaleTimeString("en-US", {
+              hour: "numeric",
+              hour12: true
+            });
+            const hourTemperature = `${convertTempUnit(dayData?.temperature[index], tempUnit)}°`;
+
+            return (
+              <li
+                key={h}
+                className={`flex justify-between items-center gap-3 bg-n-700 border border-n-600 rounded-md px-4 py-2 ${isLoading ? "invisible" : "block"}`}>
+                <div className="flex items-center gap-2">
+                  <img
+                    alt={`${weatherAlt} at ${hourTime}`}
+                    src={weatherSrc}
+                    className="w-10 h-10" />
+                  <span className="text-p-5m">{hourTime}</span>
                 </div>
-              </div>
-              <div className="text-p-7">{`${convertTempUnit(dayData?.temperature[index], tempUnit)}°`}</div>
-            </div>
-          ))
+                <div className="text-p-7">{hourTemperature}</div>
+              </li>)
+          })
         }
-      </div>
-    </aside>
+      </ul>
+    </section>
   )
 }
 

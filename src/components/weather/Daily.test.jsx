@@ -39,7 +39,7 @@ describe("Daily Weather Component", () => {
     const naElements = screen.getAllByText('N/A');
     expect(naElements).toHaveLength(14); 
 
-    const imgElements = screen.getAllByAltText('weather image');
+    const imgElements = screen.getAllByTestId('weather-image');
     expect(imgElements).toHaveLength(7);
   });
 

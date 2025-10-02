@@ -16,31 +16,44 @@ const SimpleDropdown = ({ list, setSelectedDay, selectedDay }) => {
   return (
     <div className="relative">
       <button
+        role="combobox"
+        id="weekday-selection-dropdown"
+        aria-expanded={isDropdownOpened}
+        aria-haspopup="listbox"
         onClick={toggleDropdown}
         data-testid="weekday-dropdown-btn"
         className="px-3 py-2 rounded-md bg-n-600 text-p-7 flex items-center justify-between gap-2 focus:outline-2 focus:outline-n-200 focus:outline-offset-4"
-        >
+      >
         <span>{list[selectedDay] || "-"}</span>
-        <ReactSVG src="assets/icon-dropdown.svg" className={`size-4 flex-center ${isDropdownOpened || "rotate-x-180"}`} />
+        <ReactSVG
+          src="assets/icon-dropdown.svg"
+          className={`size-4 flex-center ${isDropdownOpened || "rotate-x-180"}`}
+          aria-hidden="true" />
       </button>
-      {
-        <div 
-          className={`absolute top-full right-0 w-[150px] bg-n-800 border border-n-600 rounded-xl mt-3 px-2 py-2.5 text-p-7 text-n-0 [&>*]:not-last:mb-2 ${isDropdownOpened ? "block" : "hidden"}`}
-          >
+
+      {isDropdownOpened && (
+        <div
+          role="listbox"
+          aria-labelledby="weekday-selection-dropdown"
+          aria-live="polite"
+          className="absolute top-full right-0 w-[150px] bg-n-800 border border-n-600 rounded-xl mt-3 px-2 py-2.5 text-p-7 text-n-0 [&>*]:not-last:mb-2"
+        >
           {
             list?.map((option, idx) => (
               <button
                 key={idx}
+                role="option"
+                aria-selected={idx === selectedDay}
                 data-testid="weekday-btns"
                 onClick={() => handleWeekdayChange(idx)}
                 className={`w-full flex items-center gap-2 rounded-md px-3 py-2 text-p-7 focus:outline focus:outline-n-200 focus:outline-offset-2 ${idx === selectedDay ? "bg-n-700" : "bg-n-800"}`}
-                >
-                <span>{option}</span>
+              >
+                <p>{option}</p>
               </button>
             ))
           }
         </div>
-      }
+      )}
     </div>
   )
 }

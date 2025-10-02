@@ -14,31 +14,32 @@ const Daily = ({ dailyData, tempUnit, isLoading }) => {
     max: dailyData?.temperature_2m_max?.[i] !== undefined 
       ? `${convertTempUnit(dailyData.temperature_2m_max[i], tempUnit)}°`
       : "N/A",
-    weatherSrc: findWeatherSrc(dailyData?.weather_code[i])
+    ...findWeatherSrc(dailyData?.weather_code[i])
   }));
   
   return (
-    <div className="flex flex-col gap-4">
-      <div className="text-p-5">Daily forecast</div>
+    <section className="flex flex-col gap-4" aria-labelledby="daily-weather">
+      <h2 id="daily-weather" aria-label="Daily forecast of 7 days" className="text-p-5">Daily forecast</h2>
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-4">
         {
           dailyList.map((d, index) => (
-            <div key={`${d.day}-${index}`} className="rounded-xl bg-n-800 border border-n-600 p-4 flex flex-col items-center gap-4">
+            <figure key={`${d.day}-${index}`} className="rounded-xl bg-n-800 border border-n-600 p-4 flex flex-col items-center gap-4">
               {
                 <>
-                  <div className={`text-p-6 ${isLoading ? "invisible" : "block"}`}>{d.day}</div>
-                  <img alt="weather image" className={`w-full max-w-20 object-contain object-center ${isLoading ? "invisible" : "block"}`} src={d.weatherSrc} />
+                  <h3 className={`text-p-6 ${isLoading ? "invisible" : "block"}`}>{d.day}</h3>
+                  <img alt={d.weatherAlt} src={d.weatherSrc} data-testid="weather-image" className={`w-full max-w-20 object-contain object-center ${isLoading ? "invisible" : "block"}`}  />
                   <div className={`w-full flex items-center justify-between text-p-7 ${isLoading ? "invisible" : "block"}`}>
+                    <div className="sr-only">Temperature range is {d.min} to {d.max}</div>
                     <span>{d.min}</span>
                     <span>{d.max}</span>
                   </div>
                 </>
               }
-            </div>)
+            </figure>)
           )
         }
       </div>
-    </div>
+    </section>
   )
 }
 
